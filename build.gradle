@@ -1,0 +1,59 @@
+plugins {
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+idea {
+    project {
+        languageLevel = 17
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('io.projectreactor:reactor-bom:2020.0.22')
+
+    implementation 'io.projectreactor.netty:reactor-netty-core'
+    implementation 'io.projectreactor.netty:reactor-netty-http'
+
+    implementation 'ch.qos.logback:logback-classic:1.3.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.7.0'
+}
+
+shadowJar {
+    archiveBaseName.set('aggregation-cameras-service')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.kilai.AggregationService'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
+
+
+test {
+    testLogging.showStandardStreams = true
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+
+tasks.withType(JavaCompile) {
+    options.with {
+        encoding = 'UTF-8'
+    }
+}

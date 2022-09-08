@@ -1,4 +1,4 @@
-package ru.kilai.config.exeptions;
+package ru.kilai.exeptions;
 
 public class BedRequestException extends RuntimeException{
 

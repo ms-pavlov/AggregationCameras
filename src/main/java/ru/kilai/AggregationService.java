@@ -1,18 +1,22 @@
 package ru.kilai;
 
 import io.netty.handler.codec.http.multipart.HttpData;
-import reactor.core.publisher.Mono;
-import ru.kilai.config.HttpRNettyApplication;
-import ru.kilai.config.HttpResponseTask;
+import reactor.core.publisher.Flux;
+import reactor.netty.http.client.HttpClient;
+import ru.kilai.server.AggregationHttpServer;
+import ru.kilai.server.config.AggregationServerConfig;
+import ru.kilai.server.config.ServerConfig;
+import ru.kilai.server.routs.ActionPostRoutBuilder;
+import ru.kilai.servise.actions.GetRequestParameters;
+import ru.kilai.servise.actions.GetServiceContent;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 public class AggregationService {
 
 /*
-todo вынисти из  HttpRNettyApplication создание сервера в класс CustomRNettyServer impl CustomHttpServer
-    сделать класс для клиента
-    сделать класс который будет выполнять задания
+todo сделать класс для клиента
     Сделать класс для задания что будет получать HttpData и с помощю класс для клиента обращаться за списком url
     написать интеграционные и юнит тесты
 * */
@@ -20,18 +24,21 @@ todo вынисти из  HttpRNettyApplication создание сервера 
     public static void main(String... args) {
         System.out.println("In's work...");
 
-        new HttpRNettyApplication()
-                .route(routes -> routes.post("/",
-                        (httpServerRequest, httpServerResponse) ->
-                                new HttpResponseTask(httpServerRequest, httpServerResponse).execute(AggregationService::getValue)))
-                .run().onDispose().block();
+        ServerConfig serverConfig = new AggregationServerConfig();
+
+        Function<HttpData, Flux<String>> getParams = new GetRequestParameters();
+        Function<Flux<String>, Flux<String>> parameters = new GetServiceContent(HttpClient.create());
+
+        new AggregationHttpServer(serverConfig)
+                .route(new ActionPostRoutBuilder("/", getParams.andThen(parameters)).build())
+                .start();
     }
 
-    private static Mono<String> getValue(HttpData httpData) {
+    private static Flux<String> toFlux(HttpData httpData) {
         try {
-            return Mono.just(new String(httpData.get()));
+            return Flux.just(new String(httpData.get()));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException();
         }
     }
 }

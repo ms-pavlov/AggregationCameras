@@ -1,4 +1,4 @@
-package ru.kilai.config.routs;
+package ru.kilai.server.routs;
 
 import reactor.netty.http.server.HttpServerRoutes;
 

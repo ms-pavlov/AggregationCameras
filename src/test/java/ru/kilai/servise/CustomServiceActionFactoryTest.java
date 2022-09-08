@@ -1,9 +1,9 @@
-package ru.kilai.servise.actions;
+package ru.kilai.servise;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
-
-import java.util.stream.Stream;
+import ru.kilai.servise.CustomServiceActionFactory;
+import ru.kilai.servise.ServiceActionFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 

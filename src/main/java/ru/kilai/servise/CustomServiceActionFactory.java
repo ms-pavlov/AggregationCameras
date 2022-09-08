@@ -1,4 +1,4 @@
-package ru.kilai.servise.actions;
+package ru.kilai.servise;
 
 import reactor.core.publisher.Flux;
 

@@ -1,4 +1,4 @@
-package ru.kilai.config.routs;
+package ru.kilai.server.routs;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.reactivestreams.Publisher;
@@ -8,8 +8,8 @@ import reactor.core.publisher.Flux;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
 import reactor.netty.http.server.HttpServerRoutes;
-import ru.kilai.servise.actions.CustomServiceActionFactory;
-import ru.kilai.servise.actions.ServiceActionFactory;
+import ru.kilai.servise.CustomServiceActionFactory;
+import ru.kilai.servise.ServiceActionFactory;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

@@ -1,39 +1,36 @@
-package ru.kilai.config;
+package ru.kilai.server;
 
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 import reactor.netty.http.server.HttpServerRoutes;
+import ru.kilai.server.config.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class HttpRNettyApplication implements HttpApplication{
-
+public class AggregationHttpServer implements CustomHttpServer{
     private final List<Consumer<HttpServerRoutes>> conditions;
     private final HttpServer httpServer;
 
-    public HttpRNettyApplication(int port) {
+    public AggregationHttpServer(HttpServer httpServer) {
         this.conditions = new ArrayList<>();
-        httpServer = HttpServer.create().port(port);
-        httpServer.warmup().block();
+        this.httpServer = httpServer;
     }
 
-    public HttpRNettyApplication() {
-        this(8080);
+    public AggregationHttpServer(ServerConfig config) {
+        this(config.configure());
     }
 
     @Override
-    public HttpApplication route(Consumer<HttpServerRoutes> condition) {
+    public CustomHttpServer route(Consumer<HttpServerRoutes> condition) {
         conditions.add(condition);
         return this;
     }
 
     @Override
-    public DisposableServer run() {
+    public DisposableServer start() {
         return httpServer.route(routes -> conditions.forEach(condition -> condition.accept(routes)))
                 .bindNow();
     }
-
-
 }

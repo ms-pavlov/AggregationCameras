@@ -1,5 +1,6 @@
 package ru.kilai.config;
 
+import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 import reactor.netty.http.server.HttpServerRoutes;
 
@@ -12,10 +13,14 @@ public class HttpRNettyApplication implements HttpApplication{
     private final List<Consumer<HttpServerRoutes>> conditions;
     private final HttpServer httpServer;
 
-    public HttpRNettyApplication() {
+    public HttpRNettyApplication(int port) {
         this.conditions = new ArrayList<>();
-        httpServer = HttpServer.create().port(8080);
+        httpServer = HttpServer.create().port(port);
         httpServer.warmup().block();
+    }
+
+    public HttpRNettyApplication() {
+        this(8080);
     }
 
     @Override
@@ -25,8 +30,10 @@ public class HttpRNettyApplication implements HttpApplication{
     }
 
     @Override
-    public void run() {
-        httpServer.route(routes -> conditions.forEach(condition -> condition.accept(routes)))
-                .bindNow().onDispose().block();
+    public DisposableServer run() {
+        return httpServer.route(routes -> conditions.forEach(condition -> condition.accept(routes)))
+                .bindNow();
     }
+
+
 }

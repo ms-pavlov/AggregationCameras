@@ -24,7 +24,7 @@ todo вынисти из  HttpRNettyApplication создание сервера 
                 .route(routes -> routes.post("/",
                         (httpServerRequest, httpServerResponse) ->
                                 new HttpResponseTask(httpServerRequest, httpServerResponse).execute(AggregationService::getValue)))
-                .run();
+                .run().onDispose().block();
     }
 
     private static Mono<String> getValue(HttpData httpData) {

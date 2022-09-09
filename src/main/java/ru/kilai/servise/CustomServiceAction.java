@@ -18,18 +18,13 @@ public class CustomServiceAction<T, R> implements ServiceAction<R> {
 
     @Override
     public Flux<R> execute() {
-        return input.flatMap(t -> {
-            log.debug("execute item: {}", t);
-            return action.apply(t);
-        });
+        log.debug(Thread.currentThread().getName());
+        return input.flatMap(action);
     }
 
     @Override
     public <V> ServiceAction<V> andThen(Function<R, Flux<V>> after) {
         return new CustomServiceAction<>(input, action
-                .andThen(rFlux -> rFlux.flatMap(r -> {
-                    log.debug("andThen item: {}", r);
-                    return after.apply(r);
-                })));
+                .andThen(rFlux -> rFlux.flatMap(after)));
     }
 }

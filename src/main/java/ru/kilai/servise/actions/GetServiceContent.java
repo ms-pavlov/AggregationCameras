@@ -12,7 +12,6 @@ public class GetServiceContent implements Function<Flux<String>, Flux<String>> {
         this.client = client;
     }
 
-
     @Override
     public Flux<String> apply(Flux<String> input) {
         return input.flatMap(s -> client.get()

@@ -2,7 +2,10 @@ package ru.kilai;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.client.HttpClient;
+import reactor.tools.agent.ReactorDebugAgent;
+import ru.kilai.config.SimplerThreadFactory;
 import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.server.config.ServerConfig;
@@ -10,7 +13,8 @@ import ru.kilai.server.routs.ActionPostRoutBuilder;
 import ru.kilai.servise.actions.GetRequestParameters;
 import ru.kilai.servise.actions.GetServiceContent;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 public class AggregationService {
@@ -23,22 +27,19 @@ todo сделать класс для клиента
 
     public static void main(String... args) {
         System.out.println("In's work...");
+        ReactorDebugAgent.init();
+
+        var client = HttpClient.create();
+
+        var executorService = Executors.newFixedThreadPool(4,
+                new SimplerThreadFactory("worker-"));
+
+        Function<HttpData, Flux<String>> getParams = new GetRequestParameters()
+                .andThen(new GetServiceContent(client));
 
         ServerConfig serverConfig = new AggregationServerConfig();
-
-        Function<HttpData, Flux<String>> getParams = new GetRequestParameters();
-        Function<Flux<String>, Flux<String>> parameters = new GetServiceContent(HttpClient.create());
-
         new AggregationHttpServer(serverConfig)
-                .route(new ActionPostRoutBuilder("/", getParams.andThen(parameters)).build())
+                .route(new ActionPostRoutBuilder("/", getParams).build())
                 .start();
-    }
-
-    private static Flux<String> toFlux(HttpData httpData) {
-        try {
-            return Flux.just(new String(httpData.get()));
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
     }
 }

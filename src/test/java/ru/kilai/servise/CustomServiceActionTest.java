@@ -3,8 +3,12 @@ package ru.kilai.servise;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
-import ru.kilai.servise.CustomServiceAction;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
+import ru.kilai.config.SimplerThreadFactory;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class CustomServiceActionTest {
 
     private Stream<Integer> testData;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(4,
+            new SimplerThreadFactory("executor-"));
 
     @BeforeEach
     void setUo() {

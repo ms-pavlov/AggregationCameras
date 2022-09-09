@@ -1,17 +1,7 @@
 package ru.kilai.servise.strategies;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Flux;
-import reactor.netty.http.client.HttpClient;
-import ru.kilai.server.AggregationHttpServer;
-import ru.kilai.server.config.AggregationServerConfig;
-import ru.kilai.server.routs.PostBindStrategy;
-import ru.kilai.server.routs.PostRoutBinder;
-import ru.kilai.servise.CustomServiceActionFactory;
 import ru.kilai.util.AbstractServiceTest;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;

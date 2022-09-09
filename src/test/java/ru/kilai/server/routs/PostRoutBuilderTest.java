@@ -3,10 +3,6 @@ package ru.kilai.server.routs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
-import reactor.netty.http.client.HttpClient;
-import reactor.netty.http.server.HttpServerRoutes;
-import ru.kilai.server.AggregationHttpServer;
-import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.servise.CustomServiceActionFactory;
 import ru.kilai.util.AbstractServiceTest;
 
@@ -16,9 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class PostRoutBuilderTest {
-    private static final int PORT = (int) Math.round(1000 + Math.random() * 5000);
     private static final String TEST_DATA = "same test data";
-    private static final String TEST_DATA_NAME = "name";
     private static final String UPI = "/";
 
     private PostBindStrategy bindStrategy;

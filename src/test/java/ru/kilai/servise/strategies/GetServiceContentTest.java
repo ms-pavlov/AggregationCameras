@@ -6,13 +6,9 @@ import reactor.core.publisher.Flux;
 import reactor.netty.http.client.HttpClient;
 import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
-import ru.kilai.server.routs.PostBindStrategy;
-import ru.kilai.server.routs.PostRoutBinder;
-import ru.kilai.servise.CustomServiceActionFactory;
 import ru.kilai.util.AbstractServiceTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class GetServiceContentTest {

@@ -8,7 +8,7 @@ import ru.kilai.config.SimplerThreadFactory;
 import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.server.config.ServerConfig;
-import ru.kilai.server.routs.BindStrategyWithScheduler;
+import ru.kilai.server.routs.PostBindStrategy;
 import ru.kilai.server.routs.PostRoutBinder;
 import ru.kilai.servise.CustomServiceActionFactory;
 import ru.kilai.servise.strategies.*;
@@ -43,7 +43,7 @@ todo сделать класс для клиента
 
         var actionFactory = new CustomServiceActionFactory<HttpData, String>();
 
-        var bindStrategy = new BindStrategyWithScheduler(getParams, actionFactory, executorService);
+        var bindStrategy = new PostBindStrategy(getParams, actionFactory);
 
         ServerConfig serverConfig = new AggregationServerConfig(8080, 4);
         new AggregationHttpServer(serverConfig)

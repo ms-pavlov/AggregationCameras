@@ -1,11 +1,9 @@
-package ru.kilai.servise.actions;
+package ru.kilai.servise.strategies;
 
 import reactor.core.publisher.Flux;
 import reactor.netty.http.client.HttpClient;
 
-import java.util.function.Function;
-
-public class GetServiceContent implements Function<Flux<String>, Flux<String>> {
+public class GetServiceContent implements RequestHandler<Flux<String>, String> {
     private final HttpClient client;
 
     public GetServiceContent(HttpClient client) {
@@ -15,8 +13,8 @@ public class GetServiceContent implements Function<Flux<String>, Flux<String>> {
     @Override
     public Flux<String> apply(Flux<String> input) {
         return input.flatMap(s -> client.get()
-                .uri(s)
-                .responseContent()
-                .asString());
+            .uri(s)
+            .responseContent()
+            .asString());
     }
 }

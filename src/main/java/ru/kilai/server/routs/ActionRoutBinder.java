@@ -4,7 +4,7 @@ import reactor.netty.http.server.HttpServerRoutes;
 
 import java.util.function.Consumer;
 
-public interface ActionRoutBuilder {
+public interface ActionRoutBinder {
 
-    Consumer<HttpServerRoutes> build();
+    Consumer<HttpServerRoutes> bind();
 }

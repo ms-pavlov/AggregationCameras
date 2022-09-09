@@ -1,10 +1,16 @@
-package ru.kilai.servise.actions;
+package ru.kilai.servise.strategies;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
 import reactor.netty.http.client.HttpClient;
 import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
-import ru.kilai.server.routs.ActionPostRoutBuilder;
+import ru.kilai.server.routs.PostBindStrategy;
+import ru.kilai.server.routs.PostRoutBinder;
+import ru.kilai.servise.CustomServiceActionFactory;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,11 +20,23 @@ class GetRequestParametersTest {
     private static final String TEST_DATA = "same test data";
     private static final String TEST_DATA_NAME = "name";
 
+    private PostBindStrategy bindStrategy;
+
+    @BeforeEach
+    void setUp() {
+        this.bindStrategy = new PostBindStrategy(
+                httpData -> {
+                    try {
+                        return Flux.just(new String(httpData.get()));
+                    } catch (IOException e) {
+                        throw new RuntimeException();
+                    }
+                },
+                new CustomServiceActionFactory<>());
+    }
     @Test
     void apply() {
-        var parameters = new GetRequestParameters();
-
-        var routBuilder = new ActionPostRoutBuilder(UPI, parameters).build();
+        var routBuilder = new PostRoutBinder(UPI, bindStrategy).bind();
 
         var server = new AggregationHttpServer(new AggregationServerConfig(PORT))
                 .route(routBuilder)

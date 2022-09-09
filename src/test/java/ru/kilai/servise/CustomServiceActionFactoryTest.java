@@ -2,13 +2,9 @@ package ru.kilai.servise;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
-import ru.kilai.config.SimplerThreadFactory;
 
-import java.util.concurrent.Executors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CustomServiceActionFactoryTest {
     private final Flux<Integer> INPUT_DATA = Flux.just(1, 2, 3);

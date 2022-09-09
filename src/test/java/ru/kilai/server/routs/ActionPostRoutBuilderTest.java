@@ -1,11 +1,12 @@
 package ru.kilai.server.routs;
 
-import io.netty.handler.codec.http.multipart.HttpData;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.netty.http.client.HttpClient;
 import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
+import ru.kilai.servise.CustomServiceActionFactory;
 
 import java.io.IOException;
 
@@ -17,10 +18,23 @@ class ActionPostRoutBuilderTest {
     private static final String TEST_DATA_NAME = "name";
     private static final String UPI = "/";
 
+    private PostBindStrategy bindStrategy;
 
+    @BeforeEach
+    void setUp() {
+        this.bindStrategy = new PostBindStrategy(
+                httpData -> {
+                    try {
+                        return Flux.just(new String(httpData.get()));
+                    } catch (IOException e) {
+                        throw new RuntimeException();
+                    }
+                },
+                new CustomServiceActionFactory<>());
+    }
     @Test
     void build() {
-        var routBuilder = new ActionPostRoutBuilder(UPI, this::toFlux).build();
+        var routBuilder = new PostRoutBinder(UPI, bindStrategy).bind();
 
         var server = new AggregationHttpServer(new AggregationServerConfig(PORT))
                 .route(routBuilder)
@@ -40,14 +54,4 @@ class ActionPostRoutBuilderTest {
         server.disposeNow();
     }
 
-    private Flux<String> toFlux(HttpData httpData) {
-        try {
-            if (httpData.getName().equals(TEST_DATA_NAME)) {
-                return Flux.just(new String(httpData.get()));
-            }
-            return null;
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
 }

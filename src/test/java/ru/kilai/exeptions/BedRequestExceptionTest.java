@@ -1,7 +1,6 @@
 package ru.kilai.exeptions;
 
 import org.junit.jupiter.api.Test;
-import ru.kilai.exeptions.BedRequestException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;

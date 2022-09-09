@@ -2,31 +2,27 @@ package ru.kilai.server.routs;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Flux;
-import reactor.netty.http.server.HttpServerRequest;
-import reactor.netty.http.server.HttpServerResponse;
-import ru.kilai.servise.CustomServiceAction;
+import reactor.netty.http.client.HttpClient;
+import ru.kilai.servise.CustomServiceActionFactory;
+import ru.kilai.servise.strategies.GetRequestParameters;
+import ru.kilai.util.AbstractServiceTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class PostBindStrategyTest {
     private static final String PING = "ping";
     @Test
     void apply() {
+        var handler = spy(new GetRequestParameters());
+        var actionFactory = new CustomServiceActionFactory<HttpData, String>();
+        var bindStrategy = spy(new PostBindStrategy(handler, actionFactory));
 
-        var req = mock(HttpServerRequest.class);
-        var res = mock(HttpServerResponse.class);
-        var data = mock(HttpData.class);
+        var result = new AbstractServiceTest().prepServerAndMakeResponse("127.0.0.1", PING, bindStrategy);
 
-        when(data.getName()).thenReturn(PING);
-        when(req.receiveForm()).thenReturn(Flux.just(data));
-
-        new PostBindStrategy(httpData -> {
-            assertEquals(PING, httpData.getName());
-            return Flux.just(httpData.getName());
-        }, CustomServiceAction::new).apply(req, res);
-
+        assertEquals(PING, result);
+        verify(handler, times(1)).apply(any());
+        verify(bindStrategy, times(1)).apply(any(), any());
     }
 }

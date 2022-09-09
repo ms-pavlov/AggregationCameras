@@ -9,51 +9,21 @@ import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.server.routs.PostBindStrategy;
 import ru.kilai.server.routs.PostRoutBinder;
 import ru.kilai.servise.CustomServiceActionFactory;
+import ru.kilai.util.AbstractServiceTest;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class GetRequestParametersTest {
-    private static final int PORT = (int) Math.round(1000 + Math.random() * 5000);
-    private static final String UPI = "/";
     private static final String TEST_DATA = "same test data";
-    private static final String TEST_DATA_NAME = "name";
 
-    private PostBindStrategy bindStrategy;
-
-    @BeforeEach
-    void setUp() {
-        this.bindStrategy = new PostBindStrategy(
-                httpData -> {
-                    try {
-                        return Flux.just(new String(httpData.get()));
-                    } catch (IOException e) {
-                        throw new RuntimeException();
-                    }
-                },
-                new CustomServiceActionFactory<>());
-    }
     @Test
     void apply() {
-        var routBuilder = new PostRoutBinder(UPI, bindStrategy).bind();
-
-        var server = new AggregationHttpServer(new AggregationServerConfig(PORT))
-                .route(routBuilder)
-                .start();
-
-        var response = HttpClient.create()
-                .post()
-                .uri("127.0.0.1:" + PORT + "/")
-                .sendForm((httpClientRequest, httpClientForm) -> httpClientForm.attr(TEST_DATA_NAME, TEST_DATA))
-                .responseContent()
-                .aggregate()
-                .asString()
-                .block();
+        var requestParameters = spy(new GetRequestParameters());
+        var response = new AbstractServiceTest().prepServerAndMakeResponse("127.0.0.1", TEST_DATA, requestParameters);
 
         assertEquals(TEST_DATA, response);
-
-        server.disposeNow();
-
     }
 }

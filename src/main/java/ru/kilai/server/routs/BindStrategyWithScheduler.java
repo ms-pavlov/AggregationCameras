@@ -29,7 +29,6 @@ public class BindStrategyWithScheduler implements BindStrategy {
                 .sendString(actionFactory
                         .createAction(httpServerRequest.receiveForm(), handler)
                         .execute()
-                        .publishOn(Schedulers.fromExecutor(executorService))
-                        .subscribeOn(Schedulers.fromExecutor(executorService)));
+                        .publishOn(Schedulers.fromExecutor(executorService)));
     }
 }

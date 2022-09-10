@@ -1,4 +1,4 @@
-package ru.kilai.servise.strategies;
+package ru.kilai.servise.handlers;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ class SchedulerWrapperTest {
 
     @Test
     void apply() throws IOException {
-        var parameters = spy(new GetRequestParameters());
+        var parameters = spy(new PostParameters());
         var httpData = mock(HttpData.class);
         var executorService = Executors.newFixedThreadPool(4,
                 new SimplerThreadFactory("worker-"));

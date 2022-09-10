@@ -1,4 +1,4 @@
-package ru.kilai.servise.strategies;
+package ru.kilai.servise.handlers;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;

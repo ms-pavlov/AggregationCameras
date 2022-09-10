@@ -11,7 +11,7 @@ import ru.kilai.server.routs.BindStrategy;
 import ru.kilai.server.routs.PostBindStrategy;
 import ru.kilai.server.routs.PostRoutBinder;
 import ru.kilai.servise.CustomServiceActionFactory;
-import ru.kilai.servise.strategies.RequestHandler;
+import ru.kilai.servise.handlers.RequestHandler;
 
 import java.io.IOException;
 import java.util.function.Consumer;

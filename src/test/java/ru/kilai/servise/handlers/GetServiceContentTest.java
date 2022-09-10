@@ -1,4 +1,4 @@
-package ru.kilai.servise.strategies;
+package ru.kilai.servise.handlers;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.junit.jupiter.api.Test;
@@ -24,10 +24,10 @@ class GetServiceContentTest {
                                         httpServerResponse.sendString(Flux.just(TEST_DATA))))
                 .start();
 
-        RequestHandler<HttpData, String> handler = new GetRequestParameters();
+        RequestHandler<HttpData, String> handler = new PostParameters();
 
         System.out.println("127.0.0.1:"+PORT+"/");
-        var serviceContent = spy(new GetServiceContent(HttpClient.create()));
+        var serviceContent = spy(new ContentHttpRequest(HttpClient.create()));
         var response = new AbstractServiceTest().prepServerAndMakeResponse("127.0.0.1", "127.0.0.1:"+PORT+"/", handler.andThen(serviceContent));
 
         service.disposeNow();

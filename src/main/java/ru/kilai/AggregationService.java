@@ -11,9 +11,12 @@ import ru.kilai.server.config.ServerConfig;
 import ru.kilai.server.routs.PostBindStrategy;
 import ru.kilai.server.routs.PostRoutBinder;
 import ru.kilai.servise.CustomServiceActionFactory;
-import ru.kilai.servise.strategies.*;
+import ru.kilai.servise.handlers.*;
+import ru.kilai.servise.handlers.factories.CustomServiceHandlerFactory;
 
+import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.function.Supplier;
 
 public class AggregationService {
 
@@ -30,20 +33,12 @@ todo сделать класс для клиента
         var client = HttpClient.create().runOn(new NioEventLoopGroup(2,
                 new SimplerThreadFactory("client-event-")));
 
-        var executorService = Executors.newFixedThreadPool(4,
-                new SimplerThreadFactory("worker-"));
+        var handlerFactory = new CustomServiceHandlerFactory(4);
 
+        RequestHandler<HttpData, String> getParams = handlerFactory.createPostParametersHandler()
+                .andThen(handlerFactory.createContentHttpRequestHandler(client));
 
-        RequestHandler<HttpData, String> getParams = new LogWrapper<>(new SchedulerWrapper<>(
-                new GetRequestParameters(),
-                executorService))
-                .andThen(new LogWrapper<>(new SchedulerWrapper<>(
-                        new GetServiceContent(client),
-                        executorService)));
-
-        var actionFactory = new CustomServiceActionFactory<HttpData, String>();
-
-        var bindStrategy = new PostBindStrategy(getParams, actionFactory);
+        var bindStrategy = new PostBindStrategy(getParams, new CustomServiceActionFactory<>());
 
         ServerConfig serverConfig = new AggregationServerConfig(8080, 4);
         new AggregationHttpServer(serverConfig)

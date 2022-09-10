@@ -5,7 +5,7 @@ import org.reactivestreams.Publisher;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
 import ru.kilai.servise.ServiceActionFactory;
-import ru.kilai.servise.strategies.RequestHandler;
+import ru.kilai.servise.handlers.RequestHandler;
 
 public class PostBindStrategy implements BindStrategy {
     private final RequestHandler<HttpData, String> handler;

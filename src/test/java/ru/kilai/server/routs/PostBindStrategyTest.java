@@ -3,7 +3,7 @@ package ru.kilai.server.routs;
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.junit.jupiter.api.Test;
 import ru.kilai.servise.CustomServiceActionFactory;
-import ru.kilai.servise.strategies.GetRequestParameters;
+import ru.kilai.servise.handlers.PostParameters;
 import ru.kilai.util.AbstractServiceTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +13,7 @@ class PostBindStrategyTest {
     private static final String PING = "ping";
     @Test
     void apply() {
-        var handler = spy(new GetRequestParameters());
+        var handler = spy(new PostParameters());
         var actionFactory = new CustomServiceActionFactory<HttpData, String>();
         var bindStrategy = spy(new PostBindStrategy(handler, actionFactory));
 

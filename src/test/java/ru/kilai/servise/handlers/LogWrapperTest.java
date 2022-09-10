@@ -1,4 +1,4 @@
-package ru.kilai.servise.strategies;
+package ru.kilai.servise.handlers;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ class LogWrapperTest {
 
     @Test
     void apply() throws IOException {
-        var parameters = spy(new GetRequestParameters());
+        var parameters = spy(new PostParameters());
         var httpData = mock(HttpData.class);
         when(httpData.get()).thenReturn("".getBytes());
         when(parameters.apply(httpData).log()).thenReturn(Flux.just("ans"));

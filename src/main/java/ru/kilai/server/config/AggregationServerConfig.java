@@ -10,7 +10,7 @@ public class AggregationServerConfig implements ServerConfig{
     private static final Logger log = LoggerFactory.getLogger(AggregationServerConfig.class);
     private final static int DEFAULT_PORT = 8080;
     private final static String DEFAULT_HOST = "localhost";
-    private final static int DEFAULT_EVENT_POOL_SIZE = 2;
+    private final static int DEFAULT_EVENT_POOL_SIZE = 1;
 
     private final String host;
     private final int port;
@@ -42,7 +42,7 @@ public class AggregationServerConfig implements ServerConfig{
                 .create()
                 .host(host)
                 .port(port)
-                .runOn(new NioEventLoopGroup(eventPoolSize,
+                .runOn(new NioEventLoopGroup(Math.max(DEFAULT_EVENT_POOL_SIZE, eventPoolSize),
                         new SimplerThreadFactory("server-event-")));
     }
 }

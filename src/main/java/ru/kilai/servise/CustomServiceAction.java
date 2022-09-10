@@ -3,7 +3,7 @@ package ru.kilai.servise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
-import ru.kilai.servise.strategies.RequestHandler;
+import ru.kilai.servise.handlers.RequestHandler;
 
 public class CustomServiceAction<T, R> implements ServiceAction<R> {
     private static final Logger log = LoggerFactory.getLogger(CustomServiceAction.class);

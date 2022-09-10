@@ -1,11 +1,11 @@
-package ru.kilai.servise.strategies;
+package ru.kilai.servise.handlers;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 
-public class GetRequestParameters implements RequestHandler<HttpData, String> {
+public class PostParameters implements RequestHandler<HttpData, String> {
     @Override
     public Flux<String> apply(HttpData httpData) {
         try {

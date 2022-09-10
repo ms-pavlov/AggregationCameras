@@ -1,12 +1,12 @@
-package ru.kilai.servise.strategies;
+package ru.kilai.servise.handlers;
 
 import reactor.core.publisher.Flux;
 import reactor.netty.http.client.HttpClient;
 
-public class GetServiceContent implements RequestHandler<Flux<String>, String> {
+public class ContentHttpRequest implements RequestHandler<Flux<String>, String> {
     private final HttpClient client;
 
-    public GetServiceContent(HttpClient client) {
+    public ContentHttpRequest(HttpClient client) {
         this.client = client;
     }
 

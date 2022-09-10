@@ -1,4 +1,4 @@
-package ru.kilai.servise.strategies;
+package ru.kilai.servise.handlers;
 
 import org.junit.jupiter.api.Test;
 import ru.kilai.util.AbstractServiceTest;
@@ -11,7 +11,7 @@ class GetRequestParametersTest {
 
     @Test
     void apply() {
-        var requestParameters = spy(new GetRequestParameters());
+        var requestParameters = spy(new PostParameters());
         var response = new AbstractServiceTest().prepServerAndMakeResponse("127.0.0.1", TEST_DATA, requestParameters);
 
         assertEquals(TEST_DATA, response);

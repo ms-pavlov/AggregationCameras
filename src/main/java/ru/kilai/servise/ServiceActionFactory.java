@@ -1,7 +1,7 @@
 package ru.kilai.servise;
 
 import reactor.core.publisher.Flux;
-import ru.kilai.servise.strategies.RequestHandler;
+import ru.kilai.servise.handlers.RequestHandler;
 
 public interface ServiceActionFactory<T, R> {
 

@@ -2,15 +2,15 @@ package ru.kilai.server.routs;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Flux;
 import ru.kilai.servise.CustomServiceActionFactory;
+import ru.kilai.servise.handlers.GetParameters;
 import ru.kilai.util.AbstractServiceTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
 
 class GetRoutBinderTest {
-    private static final String TEST_DATA = "same test data";
+    private static final String TEST_DATA = "same_test_data";
     private static final String UPI = "/";
 
     private GetBindStrategy bindStrategy;
@@ -18,9 +18,8 @@ class GetRoutBinderTest {
     @BeforeEach
     void setUp() {
         this.bindStrategy = new GetBindStrategy(
-                Flux::just,
-                new CustomServiceActionFactory<>()
-                , TEST_DATA);
+                new GetParameters(),
+                new CustomServiceActionFactory<>());
     }
 
     @Test
@@ -28,7 +27,7 @@ class GetRoutBinderTest {
         var routBinder = spy(new GetRoutBinder(UPI, bindStrategy));
 
         var result = new AbstractServiceTest()
-                .prepServerAndMakeGetResponse("127.0.0.1", routBinder.bind());
+                .prepServerAndMakeGetResponse("127.0.0.1", routBinder.bind(), "?url=" + TEST_DATA);
 
         assertEquals(TEST_DATA, result);
 

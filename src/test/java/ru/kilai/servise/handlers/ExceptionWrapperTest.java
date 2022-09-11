@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import ru.kilai.client.CustomContentHttpClient;
 import ru.kilai.exeptions.CustomExceptionHandlerFactory;
-import ru.kilai.exeptions.ExceptionHandlerFactory;
 import ru.kilai.exeptions.ExceptionHandlerMap;
 import ru.kilai.exeptions.ExceptionHandlerMapImpl;
 import ru.kilai.exeptions.handlers.ExceptionHandler;

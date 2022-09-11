@@ -15,9 +15,10 @@ class GetBindStrategyTest {
     void apply() {
         var handler = spy(new GetParameters());
         var actionFactory = new CustomServiceActionFactory<String, String>();
-        var bindStrategy = spy(new GetBindStrategy(handler, actionFactory, PING));
+        var bindStrategy = spy(new GetBindStrategy(handler, actionFactory));
 
-        var result = new AbstractServiceTest().prepServerAndMakeGetResponse("127.0.0.1", bindStrategy);
+        var result = new AbstractServiceTest()
+                .prepServerAndMakeGetResponse("127.0.0.1", bindStrategy, "?url=" + PING);
 
         assertEquals(PING, result);
         verify(handler, times(1)).apply(any());

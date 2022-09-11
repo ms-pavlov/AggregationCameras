@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class GetServiceContentTest {
-    private static final String TEST_DATA = "same test data";
+    private static final String TEST_DATA = "same_test_data";
     private static final int PORT = (int) (1000 + Math.random() * 5000);
 
     @Test

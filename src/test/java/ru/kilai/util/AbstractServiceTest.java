@@ -35,16 +35,6 @@ public class AbstractServiceTest {
                 .block();
     }
 
-    public String makeGetResponse(String host, String uri) {
-        return HttpClient.create()
-                .get()
-                .uri(host + ":" + port + uri)
-                .responseContent()
-                .aggregate()
-                .asString()
-                .block();
-    }
-
     public CustomHttpServer prepPostServer(Consumer<HttpServerRoutes> routBinder, String host) {
         return new AggregationHttpServer(new AggregationServerConfig(host, port, 2))
                 .route(routBinder);
@@ -53,25 +43,13 @@ public class AbstractServiceTest {
     public String prepServerAndMakeResponse(String host, String paramValue, Consumer<HttpServerRoutes> routBuilder) {
         var server = prepPostServer(routBuilder, host);
         server.start();
-        var result = makeResponse(host, "/", "name", paramValue);
-        server.stop();
-        return result;
-    }
-
-    public String prepServerAndMakeGetResponse(String host, Consumer<HttpServerRoutes> routBuilder) {
-        var server = prepPostServer(routBuilder, host);
-        server.start();
-        var result = makeGetResponse(host, "/");
+        var result = makeResponse(host, "/", "url", paramValue);
         server.stop();
         return result;
     }
 
     public String prepServerAndMakeResponse(String host, String paramValue, BindStrategy bindStrategy) {
         return prepServerAndMakeResponse(host, paramValue, new PostRoutBinder("/", bindStrategy).bind());
-    }
-
-    public String prepServerAndMakeGetResponse(String host, BindStrategy bindStrategy) {
-        return prepServerAndMakeGetResponse(host, new GetRoutBinder("/", bindStrategy).bind());
     }
 
     public String prepServerAndMakeResponse(String host, String paramValue, RequestHandler<HttpData, String> handler) {
@@ -87,5 +65,29 @@ public class AbstractServiceTest {
             }
         };
         return prepServerAndMakeResponse(host, paramValue, handler);
+    }
+
+    public String prepServerAndMakeGetResponse(String host, Consumer<HttpServerRoutes> routBuilder, String urlParam) {
+        var server = prepPostServer(routBuilder, host);
+        server.start();
+        var result = makeGetResponse(host, "/" + urlParam);
+        server.stop();
+        return result;
+    }
+
+    public String prepServerAndMakeGetResponse(String host, BindStrategy bindStrategy, String urlParam) {
+        return prepServerAndMakeGetResponse(host, new GetRoutBinder("/", bindStrategy).bind(), urlParam);
+    }
+
+
+    public String makeGetResponse(String host, String uri) {
+        System.out.println(host + ":" + port + uri);
+        return HttpClient.create()
+                .get()
+                .uri(host + ":" + port + uri)
+                .responseContent()
+                .aggregate()
+                .asString()
+                .block();
     }
 }

@@ -39,8 +39,7 @@ public class AggregationApplication {
         server.route(new GetRoutBinder("/",
                 new GetBindStrategy(new GetParameters()
                         .andThen(handlerConfig.getRetryHandler()),
-                        new CustomServiceActionFactory<>(),
-                        config.getIndexUrl()))
+                        new CustomServiceActionFactory<>()))
                 .bind());
 
         server.start();

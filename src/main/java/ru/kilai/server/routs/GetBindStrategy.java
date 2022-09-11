@@ -1,5 +1,6 @@
 package ru.kilai.server.routs;
 
+import io.netty.handler.codec.http.QueryStringDecoder;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.netty.http.server.HttpServerRequest;
@@ -10,21 +11,20 @@ import ru.kilai.servise.handlers.RequestHandler;
 public class GetBindStrategy implements BindStrategy {
     private final RequestHandler<String, String> handler;
     private final ServiceActionFactory<String, String> actionFactory;
-    private final String sourceUrl;
+
 
     public GetBindStrategy(RequestHandler<String, String> handler,
-                           ServiceActionFactory<String, String> actionFactory,
-                           String sourceUrl) {
+                           ServiceActionFactory<String, String> actionFactory) {
         this.handler = handler;
         this.actionFactory = actionFactory;
-        this.sourceUrl = sourceUrl;
     }
 
     @Override
-    public Publisher<Void> apply(HttpServerRequest httpServerRequest, HttpServerResponse httpServerResponse) {
-        return httpServerResponse
+    public Publisher<Void> apply(HttpServerRequest req, HttpServerResponse res) {
+        var parameters = new QueryStringDecoder(req.uri()).parameters();
+        return res
                 .sendString(actionFactory
-                        .createAction(Flux.just(sourceUrl), handler)
+                        .createAction(Flux.fromStream(parameters.get("url").stream()), handler)
                         .execute());
     }
 }

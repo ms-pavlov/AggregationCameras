@@ -10,7 +10,10 @@ public class PostParameters implements RequestHandler<HttpData, String> {
     @Override
     public Flux<String> apply(HttpData httpData) {
         try {
-            return Flux.just(new String(httpData.get()));
+            if (httpData.getName().equals("url")) {
+                return Flux.just(new String(httpData.get()));
+            }
+            return Flux.empty();
         } catch (IOException e) {
             throw new BadPostParametersException(e);
         }

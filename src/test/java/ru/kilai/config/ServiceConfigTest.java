@@ -2,8 +2,6 @@ package ru.kilai.config;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -43,14 +41,9 @@ class ServiceConfigTest {
     @Test
     void getRetryDelay() {
         assertEquals(0, new ServiceConfig(PATH).getRetryDelay());
-        assertEquals(1500, new ServiceConfig().getRetryDelay());
+        assertEquals(2000, new ServiceConfig().getRetryDelay());
     }
 
-    @Test
-    void getIndexUrl() {
-        assertEquals("http://www.mocky.io/v2/5c51b9dd3400003252129fb5", new ServiceConfig(PATH).getIndexUrl());
-        assertEquals("http://www.mocky.io/v2/5c51b9dd3400003252129fb5", new ServiceConfig().getIndexUrl());
-    }
 
     @Test
     void checkBadPath() {

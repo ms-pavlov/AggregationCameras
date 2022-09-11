@@ -16,6 +16,7 @@ class LogWrapperTest {
         var parameters = spy(new PostParameters());
         var httpData = mock(HttpData.class);
         when(httpData.get()).thenReturn("".getBytes());
+        when(httpData.getName()).thenReturn("url");
         when(parameters.apply(httpData).log()).thenReturn(Flux.just("ans"));
 
         var stringFlux = new LogWrapper<>(parameters).apply(httpData);

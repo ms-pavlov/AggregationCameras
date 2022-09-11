@@ -17,7 +17,6 @@ public class ServiceConfig {
     private int clientEventPoolSize = 2;
     private int handlerPoolSize = 2;
     private int retryDelay = 0;
-    private String indexUrl = "http://www.mocky.io/v2/5c51b9dd3400003252129fb5";
 
     public ServiceConfig() {
         PATHS.stream()
@@ -44,7 +43,6 @@ public class ServiceConfig {
             clientEventPoolSize = Integer.parseInt(props.getProperty("CLIENT_EVENT_LOOP_POL_SIZE", "2"));
             handlerPoolSize = Integer.parseInt(props.getProperty("HANDLER_POOL_SIZE", "2"));
             retryDelay = Integer.parseInt(props.getProperty("RETRY_DELAY", "0"));
-            indexUrl = props.getProperty("INDEX_URL", "http://www.mocky.io/v2/5c51b9dd3400003252129fb5");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +72,4 @@ public class ServiceConfig {
         return retryDelay;
     }
 
-    public String getIndexUrl() {
-        return indexUrl;
-    }
 }

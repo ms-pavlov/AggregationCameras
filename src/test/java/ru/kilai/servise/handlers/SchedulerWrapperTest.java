@@ -21,6 +21,7 @@ class SchedulerWrapperTest {
         var executorService = Executors.newFixedThreadPool(4,
                 new SimplerThreadFactory("worker-"));
         when(httpData.get()).thenReturn("".getBytes());
+        when(httpData.getName()).thenReturn("url");
         when(parameters.apply(httpData).publishOn(Schedulers.fromExecutor(executorService)))
                 .thenReturn(Flux.just("ans"));
 

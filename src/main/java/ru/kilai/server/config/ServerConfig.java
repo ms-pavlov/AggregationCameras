@@ -4,5 +4,5 @@ import reactor.netty.http.server.HttpServer;
 
 public interface ServerConfig {
 
-    HttpServer configure ();
+    HttpServer configure();
 }

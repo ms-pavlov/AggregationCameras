@@ -11,6 +11,7 @@ import static org.mockito.Mockito.*;
 
 class PostBindStrategyTest {
     private static final String PING = "ping";
+
     @Test
     void apply() {
         var handler = spy(new PostParameters());

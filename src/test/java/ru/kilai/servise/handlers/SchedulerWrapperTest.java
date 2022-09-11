@@ -9,7 +9,7 @@ import ru.kilai.config.SimplerThreadFactory;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class SchedulerWrapperTest {

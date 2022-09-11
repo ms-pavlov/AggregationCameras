@@ -9,7 +9,7 @@ import ru.kilai.util.AbstractServiceTest;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
 
 class PostRoutBuilderTest {
     private static final String TEST_DATA = "same test data";
@@ -29,6 +29,7 @@ class PostRoutBuilderTest {
                 },
                 new CustomServiceActionFactory<>());
     }
+
     @Test
     void build() {
         var routBinder = spy(new PostRoutBinder(UPI, bindStrategy));

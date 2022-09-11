@@ -2,11 +2,11 @@ package ru.kilai.servise.handlers;
 
 import reactor.core.publisher.Flux;
 
-public class LogWrapper<T, R> implements RequestHandler<T, R>  {
+public class LogWrapper<T, R> implements RequestHandler<T, R> {
     private final RequestHandler<T, R> function;
 
-    public LogWrapper(RequestHandler<T, R> function) {
-        this.function = function;
+    public LogWrapper(RequestHandler<T, R> handler) {
+        this.function = handler;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.kilai.server;
 
+import reactor.netty.DisposableChannel;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 import reactor.netty.http.server.HttpServerRoutes;
@@ -7,11 +8,15 @@ import ru.kilai.server.config.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
-public class AggregationHttpServer implements CustomHttpServer{
+public class AggregationHttpServer implements CustomHttpServer {
     private final List<Consumer<HttpServerRoutes>> conditions;
     private final HttpServer httpServer;
+
+    private DisposableServer disposableServer;
+
 
     public AggregationHttpServer(HttpServer httpServer) {
         this.conditions = new ArrayList<>();
@@ -29,8 +34,15 @@ public class AggregationHttpServer implements CustomHttpServer{
     }
 
     @Override
-    public DisposableServer start() {
-        return httpServer.route(routes -> conditions.forEach(condition -> condition.accept(routes)))
+    public void start() {
+        stop();
+        disposableServer = httpServer.route(routes -> conditions.forEach(condition -> condition.accept(routes)))
                 .bindNow();
+    }
+
+    @Override
+    public void stop() {
+        Optional.ofNullable(disposableServer)
+                .ifPresent(DisposableChannel::disposeNow);
     }
 }

@@ -3,7 +3,8 @@ package ru.kilai.servise.handlers;
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
-import reactor.netty.http.client.HttpClient;
+import reactor.netty.ByteBufFlux;
+import ru.kilai.client.CustomContentHttpClient;
 import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.util.AbstractServiceTest;
@@ -21,16 +22,18 @@ class GetServiceContentTest {
                 .route(httpServerRoutes -> httpServerRoutes
                         .get("/",
                                 (httpServerRequest, httpServerResponse) ->
-                                        httpServerResponse.sendString(Flux.just(TEST_DATA))))
-                .start();
+                                        httpServerResponse.sendString(Flux.just(TEST_DATA))));
+        service.start();
 
-        RequestHandler<HttpData, String> handler = new PostParameters();
+        RequestHandler<HttpData, String> postHandler = new PostParameters();
 
-        System.out.println("127.0.0.1:"+PORT+"/");
-        var serviceContent = spy(new ContentHttpRequest(HttpClient.create()));
-        var response = new AbstractServiceTest().prepServerAndMakeResponse("127.0.0.1", "127.0.0.1:"+PORT+"/", handler.andThen(serviceContent));
+        System.out.println("127.0.0.1:" + PORT + "/");
+        var serviceContent = spy(new ContentHttpRequest(new CustomContentHttpClient()));
+        var handler = postHandler.andThen(serviceContent)
+                .andThen(byteBufFluxFlux -> byteBufFluxFlux.flatMap(ByteBufFlux::asString));
+        var response = new AbstractServiceTest().prepServerAndMakeResponse("127.0.0.1", "127.0.0.1:" + PORT + "/", handler);
 
-        service.disposeNow();
+        service.stop();
 
         assertEquals(TEST_DATA, response);
         verify(serviceContent, times(1)).apply(any());

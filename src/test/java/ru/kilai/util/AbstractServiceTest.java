@@ -2,12 +2,13 @@ package ru.kilai.util;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import reactor.core.publisher.Flux;
-import reactor.netty.DisposableServer;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.http.server.HttpServerRoutes;
 import ru.kilai.server.AggregationHttpServer;
+import ru.kilai.server.CustomHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.server.routs.BindStrategy;
+import ru.kilai.server.routs.GetRoutBinder;
 import ru.kilai.server.routs.PostBindStrategy;
 import ru.kilai.server.routs.PostRoutBinder;
 import ru.kilai.servise.CustomServiceActionFactory;
@@ -34,21 +35,43 @@ public class AbstractServiceTest {
                 .block();
     }
 
-    public DisposableServer prepPostServer(Consumer<HttpServerRoutes> routBinder, String host) {
+    public String makeGetResponse(String host, String uri) {
+        return HttpClient.create()
+                .get()
+                .uri(host + ":" + port + uri)
+                .responseContent()
+                .aggregate()
+                .asString()
+                .block();
+    }
+
+    public CustomHttpServer prepPostServer(Consumer<HttpServerRoutes> routBinder, String host) {
         return new AggregationHttpServer(new AggregationServerConfig(host, port, 2))
-                .route(routBinder)
-                .start();
+                .route(routBinder);
     }
 
     public String prepServerAndMakeResponse(String host, String paramValue, Consumer<HttpServerRoutes> routBuilder) {
         var server = prepPostServer(routBuilder, host);
-        var result =makeResponse(host, "/", "name", paramValue);
-        server.disposeNow();
+        server.start();
+        var result = makeResponse(host, "/", "name", paramValue);
+        server.stop();
+        return result;
+    }
+
+    public String prepServerAndMakeGetResponse(String host, Consumer<HttpServerRoutes> routBuilder) {
+        var server = prepPostServer(routBuilder, host);
+        server.start();
+        var result = makeGetResponse(host, "/");
+        server.stop();
         return result;
     }
 
     public String prepServerAndMakeResponse(String host, String paramValue, BindStrategy bindStrategy) {
         return prepServerAndMakeResponse(host, paramValue, new PostRoutBinder("/", bindStrategy).bind());
+    }
+
+    public String prepServerAndMakeGetResponse(String host, BindStrategy bindStrategy) {
+        return prepServerAndMakeGetResponse(host, new GetRoutBinder("/", bindStrategy).bind());
     }
 
     public String prepServerAndMakeResponse(String host, String paramValue, RequestHandler<HttpData, String> handler) {

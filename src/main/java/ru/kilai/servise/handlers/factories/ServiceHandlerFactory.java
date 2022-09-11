@@ -1,13 +1,19 @@
 package ru.kilai.servise.handlers.factories;
 
-import io.netty.handler.codec.http.multipart.HttpData;
 import reactor.core.publisher.Flux;
-import reactor.netty.http.client.HttpClient;
+import reactor.netty.ByteBufFlux;
+import ru.kilai.client.ContentHttpClient;
 import ru.kilai.servise.handlers.RequestHandler;
+
+import javax.json.JsonObject;
 
 public interface ServiceHandlerFactory {
 
-    RequestHandler<HttpData, String> createPostParametersHandler();
+    RequestHandler<Flux<ByteBufFlux>, JsonObject> createUrlListParser();
 
-    RequestHandler<Flux<String>, String> createContentHttpRequestHandler(HttpClient client);
+    RequestHandler<Flux<JsonObject>, String> createCameraInfoToJsonString();
+
+    RequestHandler<Flux<String>, ByteBufFlux> createContentHttpRequestHandler(ContentHttpClient client);
+
+    RequestHandler<Flux<JsonObject>, JsonObject> createCameraInfoHttpRequest(ContentHttpClient client);
 }

@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import reactor.netty.http.server.HttpServer;
 import ru.kilai.config.SimplerThreadFactory;
 
-public class AggregationServerConfig implements ServerConfig{
+public class AggregationServerConfig implements ServerConfig {
     private static final Logger log = LoggerFactory.getLogger(AggregationServerConfig.class);
     private final static int DEFAULT_PORT = 8080;
     private final static String DEFAULT_HOST = "localhost";
-    private final static int DEFAULT_EVENT_POOL_SIZE = 1;
+    private final static int MIN_EVENT_POOL_SIZE = 1;
 
     private final String host;
     private final int port;
@@ -24,11 +24,11 @@ public class AggregationServerConfig implements ServerConfig{
     }
 
     public AggregationServerConfig() {
-        this(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_EVENT_POOL_SIZE);
+        this(DEFAULT_HOST, DEFAULT_PORT, MIN_EVENT_POOL_SIZE);
     }
 
     public AggregationServerConfig(int port) {
-        this(DEFAULT_HOST, port, DEFAULT_EVENT_POOL_SIZE);
+        this(DEFAULT_HOST, port, MIN_EVENT_POOL_SIZE);
     }
 
     public AggregationServerConfig(int port, int eventPoolSize) {
@@ -42,7 +42,7 @@ public class AggregationServerConfig implements ServerConfig{
                 .create()
                 .host(host)
                 .port(port)
-                .runOn(new NioEventLoopGroup(Math.max(DEFAULT_EVENT_POOL_SIZE, eventPoolSize),
+                .runOn(new NioEventLoopGroup(Math.max(MIN_EVENT_POOL_SIZE, eventPoolSize),
                         new SimplerThreadFactory("server-event-")));
     }
 }

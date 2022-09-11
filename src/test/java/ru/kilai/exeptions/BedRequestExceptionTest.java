@@ -19,4 +19,9 @@ class BedRequestExceptionTest {
         assertEquals(TEST_MSG, new BedRequestException(TEST_MSG).getMessage());
     }
 
+    @Test
+    void checkException() {
+        assertDoesNotThrow(() -> new BedRequestException(new RuntimeException()));
+    }
+
 }

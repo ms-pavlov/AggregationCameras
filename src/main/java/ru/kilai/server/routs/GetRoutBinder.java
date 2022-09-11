@@ -4,18 +4,17 @@ import reactor.netty.http.server.HttpServerRoutes;
 
 import java.util.function.Consumer;
 
-public class PostRoutBinder implements ActionRoutBinder {
+public class GetRoutBinder implements ActionRoutBinder {
     private final String uri;
     private final BindStrategy bindStrategy;
 
-    public PostRoutBinder(String uri, BindStrategy bindStrategy) {
+    public GetRoutBinder(String uri, BindStrategy bindStrategy) {
         this.uri = uri;
         this.bindStrategy = bindStrategy;
     }
 
     @Override
     public Consumer<HttpServerRoutes> bind() {
-        return httpServerRoutes -> httpServerRoutes.post(uri, bindStrategy);
+        return httpServerRoutes -> httpServerRoutes.get(uri, bindStrategy);
     }
-
 }

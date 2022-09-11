@@ -11,4 +11,5 @@ public interface RequestHandler<T, R> extends Function<T, Flux<R>> {
         Objects.requireNonNull(after);
         return (T t) -> after.apply(apply(t));
     }
+
 }

@@ -1,7 +1,6 @@
-package ru.kilai.servise;
+package ru.kilai.server;
 
 import org.junit.jupiter.api.Test;
-import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.util.AbstractServiceTest;
 
@@ -12,9 +11,10 @@ class AggregationHttpServerTest extends AbstractServiceTest {
     private static final String TEST_DATA = "same test data";
 
     @Test
-    void checkStart() {
+    void checkStartAndStop() {
         var server = new AggregationHttpServer(new AggregationServerConfig());
-        assertDoesNotThrow(() -> server.start().disposeNow());
+        assertDoesNotThrow(server::start);
+        assertDoesNotThrow(server::stop);
     }
 
     @Test

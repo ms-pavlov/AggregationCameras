@@ -1,6 +1,6 @@
 package ru.kilai.exeptions;
 
-public class BedRequestException extends RuntimeException{
+public class BedRequestException extends RuntimeException {
 
     public BedRequestException() {
         super();
@@ -8,5 +8,9 @@ public class BedRequestException extends RuntimeException{
 
     public BedRequestException(String testMsg) {
         super(testMsg);
+    }
+
+    public BedRequestException(Throwable cause) {
+        super(cause);
     }
 }

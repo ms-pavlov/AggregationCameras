@@ -2,11 +2,11 @@ package ru.kilai.servise.handlers.factories;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reactor.netty.http.client.HttpClient;
+import ru.kilai.client.ContentHttpClient;
 import ru.kilai.servise.handlers.LogWrapper;
-import ru.kilai.servise.handlers.RequestHandler;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 class CustomServiceHandlerFactoryTest {
@@ -19,14 +19,32 @@ class CustomServiceHandlerFactoryTest {
     }
 
     @Test
-    void createPostParametersHandler() {
-        assertDoesNotThrow(() -> handlerFactory.createPostParametersHandler());
-        assertEquals(LogWrapper.class, handlerFactory.createPostParametersHandler().getClass());
+    void createContentHttpRequestHandler() {
+        assertDoesNotThrow(() -> handlerFactory.createContentHttpRequestHandler(mock(ContentHttpClient.class)));
+        assertEquals(LogWrapper.class, handlerFactory.createContentHttpRequestHandler(mock(ContentHttpClient.class)).getClass());
     }
 
     @Test
-    void createContentHttpRequestHandler() {
-        assertDoesNotThrow(() -> handlerFactory.createContentHttpRequestHandler(mock(HttpClient.class)));
-        assertEquals(LogWrapper.class, handlerFactory.createContentHttpRequestHandler(mock(HttpClient.class)).getClass());
+    void checkConstructor() {
+        assertDoesNotThrow(() -> new CustomServiceHandlerFactory());
+    }
+
+    @Test
+    void createUrlListParser() {
+        assertDoesNotThrow(() -> handlerFactory.createUrlListParser());
+        assertEquals(LogWrapper.class, handlerFactory.createUrlListParser().getClass());
+
+    }
+
+    @Test
+    void createCameraInfoToJsonString() {
+        assertDoesNotThrow(() -> handlerFactory.createCameraInfoToJsonString());
+        assertEquals(LogWrapper.class, handlerFactory.createCameraInfoToJsonString().getClass());
+    }
+
+    @Test
+    void createCameraInfoHttpRequest() {
+        assertDoesNotThrow(() -> handlerFactory.createCameraInfoHttpRequest(mock(ContentHttpClient.class)));
+        assertEquals(LogWrapper.class, handlerFactory.createCameraInfoHttpRequest(mock(ContentHttpClient.class)).getClass());
     }
 }

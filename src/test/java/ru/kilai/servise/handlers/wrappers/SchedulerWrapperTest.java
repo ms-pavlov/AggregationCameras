@@ -1,10 +1,13 @@
-package ru.kilai.servise.handlers;
+package ru.kilai.servise.handlers.wrappers;
 
 import io.netty.handler.codec.http.multipart.HttpData;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 import ru.kilai.config.SimplerThreadFactory;
+import ru.kilai.servise.handlers.PostParameters;
+import ru.kilai.servise.handlers.wrappers.SchedulerWrapper;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -16,7 +19,7 @@ class SchedulerWrapperTest {
 
     @Test
     void apply() throws IOException {
-        var parameters = spy(new PostParameters());
+        var parameters = Mockito.spy(new PostParameters());
         var httpData = mock(HttpData.class);
         var executorService = Executors.newFixedThreadPool(4,
                 new SimplerThreadFactory("worker-"));

@@ -1,7 +1,8 @@
-package ru.kilai.servise.handlers;
+package ru.kilai.servise.handlers.wrappers;
 
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
+import ru.kilai.servise.handlers.RequestHandler;
 
 import java.util.concurrent.ExecutorService;
 

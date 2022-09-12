@@ -8,13 +8,16 @@ import reactor.netty.http.server.HttpServerResponse;
 import ru.kilai.servise.ServiceActionFactory;
 import ru.kilai.servise.handlers.RequestHandler;
 
+import java.util.List;
+import java.util.Map;
+
 public class GetBindStrategy implements BindStrategy {
-    private final RequestHandler<String, String> handler;
-    private final ServiceActionFactory<String, String> actionFactory;
+    private final RequestHandler<Map.Entry<String, List<String>>, String> handler;
+    private final ServiceActionFactory<Map.Entry<String, List<String>>, String> actionFactory;
 
 
-    public GetBindStrategy(RequestHandler<String, String> handler,
-                           ServiceActionFactory<String, String> actionFactory) {
+    public GetBindStrategy(RequestHandler<Map.Entry<String, List<String>>, String> handler,
+                           ServiceActionFactory<Map.Entry<String, List<String>>, String>  actionFactory) {
         this.handler = handler;
         this.actionFactory = actionFactory;
     }
@@ -24,7 +27,7 @@ public class GetBindStrategy implements BindStrategy {
         var parameters = new QueryStringDecoder(req.uri()).parameters();
         return res
                 .sendString(actionFactory
-                        .createAction(Flux.fromStream(parameters.get("url").stream()), handler)
+                        .createAction(Flux.fromStream(parameters.entrySet().stream()), handler)
                         .execute());
     }
 }

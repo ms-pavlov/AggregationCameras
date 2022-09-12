@@ -1,4 +1,4 @@
-package ru.kilai.servise.handlers;
+package ru.kilai.servise.handlers.wrappers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,8 @@ import ru.kilai.exeptions.CustomExceptionHandlerFactory;
 import ru.kilai.exeptions.ExceptionHandlerMap;
 import ru.kilai.exeptions.ExceptionHandlerMapImpl;
 import ru.kilai.exeptions.handlers.ExceptionHandler;
+import ru.kilai.servise.handlers.GetParameters;
+import ru.kilai.servise.handlers.RequestHandler;
 import ru.kilai.servise.handlers.factories.CustomServiceHandlerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

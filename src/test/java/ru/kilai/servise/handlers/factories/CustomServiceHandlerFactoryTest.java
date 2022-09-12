@@ -3,7 +3,7 @@ package ru.kilai.servise.handlers.factories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kilai.client.ContentHttpClient;
-import ru.kilai.servise.handlers.LogWrapper;
+import ru.kilai.servise.handlers.wrappers.LogWrapper;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,5 +46,17 @@ class CustomServiceHandlerFactoryTest {
     void createCameraInfoHttpRequest() {
         assertDoesNotThrow(() -> handlerFactory.createCameraInfoHttpRequest(mock(ContentHttpClient.class)));
         assertEquals(LogWrapper.class, handlerFactory.createCameraInfoHttpRequest(mock(ContentHttpClient.class)).getClass());
+    }
+
+    @Test
+    void createGetParameters() {
+        assertDoesNotThrow(() -> handlerFactory.createGetParameters());
+        assertEquals(LogWrapper.class, handlerFactory.createGetParameters().getClass());
+    }
+
+    @Test
+    void createPostParameters() {
+        assertDoesNotThrow(() -> handlerFactory.createPostParameters());
+        assertEquals(LogWrapper.class, handlerFactory.createPostParameters().getClass());
     }
 }

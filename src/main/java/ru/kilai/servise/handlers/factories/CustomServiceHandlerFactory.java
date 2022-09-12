@@ -1,12 +1,17 @@
 package ru.kilai.servise.handlers.factories;
 
+import io.netty.handler.codec.http.multipart.HttpData;
 import reactor.core.publisher.Flux;
 import reactor.netty.ByteBufFlux;
 import ru.kilai.client.ContentHttpClient;
 import ru.kilai.config.SimplerThreadFactory;
 import ru.kilai.servise.handlers.*;
+import ru.kilai.servise.handlers.wrappers.LogWrapper;
+import ru.kilai.servise.handlers.wrappers.SchedulerWrapper;
 
 import javax.json.JsonObject;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,6 +26,16 @@ public class CustomServiceHandlerFactory implements ServiceHandlerFactory {
 
     public CustomServiceHandlerFactory() {
         this(MIN_EXECUTOR_POOL_SIZE);
+    }
+
+    @Override
+    public RequestHandler<Map.Entry<String, List<String>>, String> createGetParameters() {
+        return new LogWrapper<>(new SchedulerWrapper<>(new GetParameters(), executorService));
+    }
+
+    @Override
+    public RequestHandler<HttpData, String> createPostParameters() {
+        return new LogWrapper<>(new SchedulerWrapper<>(new PostParameters(), executorService));
     }
 
     @Override

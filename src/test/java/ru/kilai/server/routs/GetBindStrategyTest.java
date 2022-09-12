@@ -5,6 +5,9 @@ import ru.kilai.servise.CustomServiceActionFactory;
 import ru.kilai.servise.handlers.GetParameters;
 import ru.kilai.util.AbstractServiceTest;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -14,7 +17,7 @@ class GetBindStrategyTest {
     @Test
     void apply() {
         var handler = spy(new GetParameters());
-        var actionFactory = new CustomServiceActionFactory<String, String>();
+        var actionFactory = new CustomServiceActionFactory<Map.Entry<String, List<String>>, String>();
         var bindStrategy = spy(new GetBindStrategy(handler, actionFactory));
 
         var result = new AbstractServiceTest()

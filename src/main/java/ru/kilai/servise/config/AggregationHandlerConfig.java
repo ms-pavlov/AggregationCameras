@@ -1,12 +1,13 @@
 package ru.kilai.servise.config;
 
+import io.netty.handler.codec.http.multipart.HttpData;
 import reactor.core.publisher.Flux;
 import ru.kilai.client.CustomContentHttpClient;
 import ru.kilai.exeptions.CustomExceptionHandlerFactory;
 import ru.kilai.exeptions.ExceptionHandlerMapImpl;
 import ru.kilai.exeptions.handlers.ExceptionHandler;
 import ru.kilai.exeptions.handlers.RetryAggregationHandler;
-import ru.kilai.servise.handlers.ExceptionWrapper;
+import ru.kilai.servise.handlers.wrappers.ExceptionWrapper;
 import ru.kilai.servise.handlers.RequestHandler;
 import ru.kilai.servise.handlers.exceptions.BadPostParametersException;
 import ru.kilai.servise.handlers.exceptions.CameraInfoJsonException;
@@ -15,6 +16,7 @@ import ru.kilai.servise.handlers.factories.CustomServiceHandlerFactory;
 import ru.kilai.servise.handlers.factories.ServiceHandlerFactory;
 
 import java.util.List;
+import java.util.Map;
 
 public class AggregationHandlerConfig {
     private static final int MIN_HANDLER_POOL = 1;
@@ -50,6 +52,14 @@ public class AggregationHandlerConfig {
 
     public RequestHandler<Flux<String>, String> getRetryHandler() {
         return retryHandler;
+    }
+
+    public RequestHandler<HttpData, String> prepPostAggregationHandler() {
+        return serviceHandlerFactory.createPostParameters();
+    }
+
+    public RequestHandler<Map.Entry<String, List<String>>, String> prepGetAggregationHandler() {
+        return serviceHandlerFactory.createGetParameters();
     }
 
     private RequestHandler<Flux<String>, String> prepAggregationHandler() {

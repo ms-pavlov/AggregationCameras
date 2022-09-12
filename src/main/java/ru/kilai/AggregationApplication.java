@@ -13,6 +13,11 @@ import ru.kilai.servise.config.AggregationHandlerConfig;
 import ru.kilai.servise.handlers.GetParameters;
 import ru.kilai.servise.handlers.PostParameters;
 
+/*
+todo переработать фабрику для ServiceHandlers
+    добавать в BindingStrategy планировщик
+ */
+
 public class AggregationApplication {
 
     public static void main(String... args) {
@@ -33,12 +38,14 @@ public class AggregationApplication {
 
         server.route(new PostRoutBinder("/",
                 new PostBindStrategy(
-                        new PostParameters().andThen(handlerConfig.getRetryHandler()),
+                        handlerConfig.prepPostAggregationHandler()
+                                .andThen(handlerConfig.getRetryHandler()),
                         new CustomServiceActionFactory<>()))
                 .bind());
         server.route(new GetRoutBinder("/",
-                new GetBindStrategy(new GetParameters()
-                        .andThen(handlerConfig.getRetryHandler()),
+                new GetBindStrategy(
+                        handlerConfig.prepGetAggregationHandler()
+                                .andThen(handlerConfig.getRetryHandler()),
                         new CustomServiceActionFactory<>()))
                 .bind());
 

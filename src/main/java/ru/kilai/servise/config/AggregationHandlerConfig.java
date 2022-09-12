@@ -14,10 +14,15 @@ import ru.kilai.servise.handlers.exceptions.UrlListParserException;
 import ru.kilai.servise.handlers.factories.CustomServiceHandlerFactory;
 import ru.kilai.servise.handlers.factories.ServiceHandlerFactory;
 
+import java.util.List;
+
 public class AggregationHandlerConfig {
     private static final int MIN_HANDLER_POOL = 1;
     private static final int MIN_CLIENT_POOL = 1;
     private static final int MIN_RETRY_DELAY = 0;
+
+    private static final List<Class<?>> aggregationException = List.of(BadPostParametersException.class,
+            CameraInfoJsonException.class, UrlListParserException.class);
 
     private final ServiceHandlerFactory serviceHandlerFactory;
     private final CustomContentHttpClient httpClient;
@@ -35,9 +40,8 @@ public class AggregationHandlerConfig {
                 Math.max(retryDelay, MIN_RETRY_DELAY));
 
         var handlerMap = new ExceptionHandlerMapImpl<Flux<String>, String>();
-        handlerMap.putHandler(BadPostParametersException.class, aggregationHandler.getClass(), retry);
-        handlerMap.putHandler(CameraInfoJsonException.class, aggregationHandler.getClass(), retry);
-        handlerMap.putHandler(UrlListParserException.class, aggregationHandler.getClass(), retry);
+        aggregationException.forEach(excClass ->
+                handlerMap.putHandler(excClass, aggregationHandler.getClass(), retry));
 
         var handlerFactory = new CustomExceptionHandlerFactory<>(handlerMap);
 

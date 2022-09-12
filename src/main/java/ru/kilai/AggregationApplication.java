@@ -6,17 +6,8 @@ import ru.kilai.server.AggregationHttpServer;
 import ru.kilai.server.config.AggregationServerConfig;
 import ru.kilai.server.routs.GetBindStrategy;
 import ru.kilai.server.routs.GetRoutBinder;
-import ru.kilai.server.routs.PostBindStrategy;
-import ru.kilai.server.routs.PostRoutBinder;
 import ru.kilai.servise.CustomServiceActionFactory;
 import ru.kilai.servise.config.AggregationHandlerConfig;
-import ru.kilai.servise.handlers.GetParameters;
-import ru.kilai.servise.handlers.PostParameters;
-
-/*
-todo переработать фабрику для ServiceHandlers
-    добавать в BindingStrategy планировщик
- */
 
 public class AggregationApplication {
 
@@ -36,12 +27,6 @@ public class AggregationApplication {
                 config.getClientEventPoolSize(),
                 config.getRetryDelay());
 
-        server.route(new PostRoutBinder("/",
-                new PostBindStrategy(
-                        handlerConfig.prepPostAggregationHandler()
-                                .andThen(handlerConfig.getRetryHandler()),
-                        new CustomServiceActionFactory<>()))
-                .bind());
         server.route(new GetRoutBinder("/",
                 new GetBindStrategy(
                         handlerConfig.prepGetAggregationHandler()

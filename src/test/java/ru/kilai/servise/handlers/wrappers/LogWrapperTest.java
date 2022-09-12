@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import reactor.core.publisher.Flux;
 import ru.kilai.servise.handlers.PostParameters;
-import ru.kilai.servise.handlers.wrappers.LogWrapper;
 
 import java.io.IOException;
 

@@ -7,13 +7,13 @@ import ru.kilai.exeptions.CustomExceptionHandlerFactory;
 import ru.kilai.exeptions.ExceptionHandlerMapImpl;
 import ru.kilai.exeptions.handlers.ExceptionHandler;
 import ru.kilai.exeptions.handlers.RetryAggregationHandler;
-import ru.kilai.servise.handlers.wrappers.ExceptionWrapper;
 import ru.kilai.servise.handlers.RequestHandler;
 import ru.kilai.servise.handlers.exceptions.BadPostParametersException;
 import ru.kilai.servise.handlers.exceptions.CameraInfoJsonException;
 import ru.kilai.servise.handlers.exceptions.UrlListParserException;
 import ru.kilai.servise.handlers.factories.CustomServiceHandlerFactory;
 import ru.kilai.servise.handlers.factories.ServiceHandlerFactory;
+import ru.kilai.servise.handlers.wrappers.ExceptionWrapper;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,6 @@ public class AggregationHandlerConfig {
     private final ServiceHandlerFactory serviceHandlerFactory;
     private final CustomContentHttpClient httpClient;
     private final RequestHandler<Flux<String>, String> retryHandler;
-
 
     public AggregationHandlerConfig(int handlerSchedulerPoolSize, int clientEventPoolSize, int retryDelay) {
         serviceHandlerFactory = new CustomServiceHandlerFactory(Math.max(handlerSchedulerPoolSize, MIN_HANDLER_POOL));

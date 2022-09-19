@@ -23,8 +23,12 @@ dependencies {
 
     implementation 'io.projectreactor.netty:reactor-netty-core'
     implementation 'io.projectreactor.netty:reactor-netty-http'
-
-    implementation 'ch.qos.logback:logback-classic:1.3.0'
+    implementation 'io.projectreactor:reactor-tools:3.4.22'
+    implementation 'javax.json:javax.json-api:1.1.4'
+    implementation 'org.glassfish:javax.json:1.1.4'
+    implementation 'ch.qos.logback:logback-classic:1.4.0'
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'commons-cli:commons-cli:1.5.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
